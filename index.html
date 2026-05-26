@@ -1,1 +1,299 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>사장님 매니저 앱</title>
+  <style>
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Noto Sans KR", sans-serif;
+      background: #f5f8fc;
+      color: #1f2937;
+    }
+    .phone {
+      width: 100%;
+      max-width: 430px;
+      min-height: 100vh;
+      margin: 0 auto;
+      background: linear-gradient(180deg, #f7fbff 0%, #f4f7fb 100%);
+      padding: 18px 20px 32px;
+    }
+    .topbar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 16px 0 18px;
+    }
+    .brand {
+      font-size: 20px;
+      font-weight: 900;
+      letter-spacing: -0.5px;
+    }
+    .icons { display: flex; gap: 12px; align-items: center; }
+    .coin {
+      width: 28px;
+      height: 28px;
+      border-radius: 50%;
+      background: #111827;
+      color: #fff;
+      display: grid;
+      place-items: center;
+      font-size: 13px;
+      font-weight: 900;
+    }
+    .hamburger { font-size: 26px; line-height: 1; }
+    .ai-card {
+      display: grid;
+      grid-template-columns: 74px 1fr;
+      gap: 12px;
+      align-items: center;
+      padding: 14px 16px;
+      border-radius: 18px;
+      background: #eef1ff;
+      box-shadow: 0 8px 22px rgba(33, 71, 163, 0.05);
+      margin-bottom: 20px;
+    }
+    .mascot {
+      height: 58px;
+      border-radius: 16px;
+      background: #ffffff;
+      display: grid;
+      place-items: center;
+      font-size: 32px;
+      box-shadow: inset 0 0 0 1px rgba(59, 130, 246, 0.08);
+    }
+    .ai-small { font-size: 14px; color: #4b5563; margin-bottom: 4px; }
+    .ai-title { font-size: 16px; color: #2563eb; font-weight: 900; }
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 24px;
+      margin-bottom: 22px;
+    }
+    .menu-card {
+      min-height: 100px;
+      border: 0;
+      border-radius: 16px;
+      background: #ffffff;
+      box-shadow: 0 10px 24px rgba(15, 23, 42, 0.05);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 9px;
+      cursor: pointer;
+      transition: 0.2s;
+      color: #374151;
+    }
+    .menu-card:active { transform: scale(0.97); }
+    .emoji { font-size: 26px; }
+    .menu-label { font-size: 15px; font-weight: 700; }
+    .tip {
+      text-align: center;
+      margin: 6px 0 20px;
+      font-size: 14px;
+      color: #3b82f6;
+      font-weight: 700;
+    }
+    .yellow-card {
+      display: grid;
+      grid-template-columns: 1fr 72px;
+      align-items: center;
+      gap: 10px;
+      padding: 20px 18px;
+      border-radius: 16px;
+      background: linear-gradient(135deg, #fff66d, #fff06b);
+      box-shadow: 0 10px 20px rgba(250, 204, 21, 0.18);
+      margin-bottom: 22px;
+    }
+    .yellow-title { font-size: 17px; font-weight: 900; margin-bottom: 6px; }
+    .yellow-sub { font-size: 14px; color: #6b5c00; }
+    .yellow-icon { font-size: 44px; text-align: right; }
+    .section {
+      padding: 20px 18px;
+      border-radius: 18px;
+      background: #ffffff;
+      box-shadow: 0 10px 24px rgba(15, 23, 42, 0.04);
+      margin-bottom: 16px;
+    }
+    .section-head {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 12px;
+    }
+    .section-title { font-size: 18px; font-weight: 900; }
+    .arrow { color: #c4c7ce; font-size: 26px; }
+    .list {
+      margin: 0;
+      padding-left: 16px;
+      color: #6b7280;
+      font-size: 13.5px;
+      line-height: 1.65;
+    }
+    .modal-bg {
+      position: fixed;
+      inset: 0;
+      background: rgba(15, 23, 42, 0.45);
+      display: none;
+      align-items: flex-end;
+      justify-content: center;
+      padding: 0 14px 20px;
+    }
+    .modal {
+      width: 100%;
+      max-width: 398px;
+      background: #fff;
+      border-radius: 22px;
+      padding: 22px 18px;
+      box-shadow: 0 20px 50px rgba(0,0,0,0.22);
+    }
+    .modal h2 { margin: 0 0 8px; font-size: 22px; }
+    .modal p { margin: 0 0 16px; color: #6b7280; line-height: 1.55; }
+    .input {
+      width: 100%;
+      height: 48px;
+      border: 1px solid #e5e7eb;
+      border-radius: 14px;
+      padding: 0 14px;
+      margin-bottom: 10px;
+      font-size: 15px;
+    }
+    .primary {
+      width: 100%;
+      height: 48px;
+      border: 0;
+      border-radius: 14px;
+      background: #111827;
+      color: #fff;
+      font-size: 16px;
+      font-weight: 900;
+      cursor: pointer;
+    }
+    .close {
+      width: 100%;
+      height: 42px;
+      border: 0;
+      background: transparent;
+      color: #6b7280;
+      font-weight: 800;
+      margin-top: 8px;
+      cursor: pointer;
+    }
+    .result-box {
+      margin-top: 12px;
+      padding: 13px;
+      border-radius: 14px;
+      background: #f3f4f6;
+      font-weight: 800;
+      color: #111827;
+      display: none;
+      line-height: 1.55;
+    }
+    @media (max-width: 360px) {
+      .phone { padding: 16px 14px 28px; }
+      .grid { gap: 14px; }
+      .menu-card { min-height: 92px; }
+      .menu-label { font-size: 14px; }
+    }
+  </style>
+</head>
+<body>
+  <main class="phone">
+    <header class="topbar">
+      <div class="brand">사장님 매니저</div>
+      <div class="icons">
+        <div class="coin">₩</div>
+        <div class="hamburger">☰</div>
+      </div>
+    </header>
+
+    <section class="ai-card">
+      <div class="mascot">🤖</div>
+      <div>
+        <div class="ai-small">사업장 관리, 어디서부터 해야 할까요?</div>
+        <div class="ai-title">AI가 오늘 할 일을 정리해드려요</div>
+      </div>
+    </section>
+
+    <section class="grid" aria-label="주요 메뉴">
+      <button class="menu-card" onclick="openModal('매출관리')"><span class="emoji">📊</span><span class="menu-label">매출관리</span></button>
+      <button class="menu-card" onclick="openModal('지출관리')"><span class="emoji">💳</span><span class="menu-label">지출관리</span></button>
+      <button class="menu-card" onclick="openModal('세금관리')"><span class="emoji">🧾</span><span class="menu-label">세금관리</span></button>
+      <button class="menu-card" onclick="openModal('고객관리')"><span class="emoji">👥</span><span class="menu-label">고객관리</span></button>
+      <button class="menu-card" onclick="openModal('설정')"><span class="emoji">⚙️</span><span class="menu-label">설정</span></button>
+      <button class="menu-card" onclick="openModal('분석')"><span class="emoji">📈</span><span class="menu-label">분석</span></button>
+    </section>
+
+    <div class="tip">🔑 기초정보를 입력하면 자동으로 정리돼요</div>
+
+    <section class="yellow-card" onclick="openModal('간편 계산서')">
+      <div>
+        <div class="yellow-title">손쉽게 발행하는 세금계산서</div>
+        <div class="yellow-sub">모바일에서도 바로 확인해보세요! 〉</div>
+      </div>
+      <div class="yellow-icon">🧾</div>
+    </section>
+
+    <section class="section">
+      <div class="section-head">
+        <div class="section-title">인사이트</div>
+        <div class="arrow">›</div>
+      </div>
+      <ul class="list">
+        <li>이번 달 예상 매출과 고정비를 한눈에 확인</li>
+        <li>세금 신고 전 꼭 챙겨야 할 항목 자동 체크</li>
+      </ul>
+    </section>
+
+    <section class="section">
+      <div class="section-head">
+        <div class="section-title">공지사항</div>
+        <div class="arrow">›</div>
+      </div>
+      <ul class="list">
+        <li>신규 사업자용 간편 장부 기능 준비 중</li>
+        <li>직원 급여 및 출근 기록 기능 업데이트 예정</li>
+      </ul>
+    </section>
+  </main>
+
+  <div class="modal-bg" id="modalBg">
+    <div class="modal">
+      <h2 id="modalTitle">메뉴</h2>
+      <p id="modalDesc">기초 정보를 입력해 간단한 예시 결과를 확인해보세요.</p>
+      <input class="input" id="salesInput" type="number" placeholder="월 매출 예: 5000000" />
+      <input class="input" id="costInput" type="number" placeholder="월 지출 예: 1800000" />
+      <button class="primary" onclick="calculateProfit()">간단 계산하기</button>
+      <div class="result-box" id="resultBox"></div>
+      <button class="close" onclick="closeModal()">닫기</button>
+    </div>
+  </div>
+
+  <script>
+    function openModal(title) {
+      document.getElementById('modalTitle').textContent = title;
+      document.getElementById('modalDesc').textContent = title + ' 기능의 첫 화면 예시입니다. 실제 앱에서는 저장, 수정, 분석 기능을 붙이면 됩니다.';
+      document.getElementById('resultBox').style.display = 'none';
+      document.getElementById('modalBg').style.display = 'flex';
+    }
+
+    function closeModal() {
+      document.getElementById('modalBg').style.display = 'none';
+    }
+
+    function calculateProfit() {
+      const sales = Number(document.getElementById('salesInput').value || 0);
+      const cost = Number(document.getElementById('costInput').value || 0);
+      const profit = sales - cost;
+      const taxReserve = Math.max(profit * 0.1, 0);
+      const box = document.getElementById('resultBox');
+      box.innerHTML = '예상 순이익: ' + profit.toLocaleString('ko-KR') + '원<br>세금 대비 적립 추천: ' + Math.round(taxReserve).toLocaleString('ko-KR') + '원';
+      box.style.display = 'block';
+    }
+  </script>
+</body>
+</html>
 
